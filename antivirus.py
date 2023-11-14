@@ -15,10 +15,13 @@ filenames = ()
 dir_selected = 0
 file_list = []
 hash_list = []
+hash_index = []
+
 
 # function to make a list with the absolute paths of all needed files
 def get_file_list():
     global file_list
+    file_list = []
     if dirname != '':
         # use the os.walk() function to get the file names in all subdirectories 
         for root, dirs, files in walk(os.path.abspath(dirname)):
@@ -47,10 +50,23 @@ def hash_files():
         hash_list.append(md5_h.hexdigest())
     print(hash_list)
 
+def virus_scan():
+    global hash_index
+    hash_index = []
+    with open("./full_md5.txt", "r") as hash_db:
+        hashes = hash_db.readlines()
+        for i, hash in enumerate(hash_list):
+            if(hash in hashes):
+                hash_index.append(i)
+
+
+    print(hash_index)
+
+
 def run_scan():
     get_file_list()
     hash_files()
-    #virus_scan()
+    virus_scan()
 
 
 # function to open the dialog box to select a directory and stores it in the dirname string
