@@ -54,13 +54,14 @@ def virus_scan():
     global hash_index
     hash_index = []
     with open("./full_md5.txt", "r") as hash_db:
-        hashes = hash_db.readlines()
+        hashes = hash_db.read().splitlines()
         for i, hash in enumerate(hash_list):
             if(hash in hashes):
                 hash_index.append(i)
 
-
     print(hash_index)
+    for index in hash_index:
+        print(file_list[index])
 
 
 def run_scan():
