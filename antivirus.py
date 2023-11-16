@@ -2,6 +2,8 @@ from customtkinter import *
 from os import path, walk
 from os.path import *
 import hashlib
+import requests
+import json
 
 
 # initializing the customtkinter app window and giving it dimensions and a title
@@ -68,6 +70,10 @@ def run_scan():
     get_file_list()
     hash_files()
     virus_scan()
+    #if(virusTotal_selected):
+    for hash in hash_list:
+        result = virusTotal_scan(hash)
+        print(result)
 
 
 # function to open the dialog box to select a directory and stores it in the dirname string
@@ -96,6 +102,47 @@ def filenames_dialog():
         file_label.configure(text=f"Selected files: {str(filenames).strip('(,)')}")
 
 
+def virusTotal_scan(id):
+    url = f"https://www.virustotal.com/api/v3/files/{id}"
+    api_key = "8da3c1b86b591198d304fbb6ee71f586057cef49ca8065cb3d9d2e2144e4e40a"
+
+    headers = {"x-apikey": api_key}
+
+    response = requests.get(url, headers=headers)
+    res_json = response.json()
+    try:
+        res_attributes = res_json["data"]["attributes"]
+
+        name = res_attributes["meaningful_name"]
+        community_score_harmless, community_score_malicious = res_attributes["total_votes"]["harmless"], res_attributes["total_votes"]["malicious"]
+        analysis_stats = res_attributes["last_analysis_stats"]
+        total = 0
+        for stat in analysis_stats:
+            total += analysis_stats[stat]
+        an_harmless = analysis_stats["harmless"]
+        an_malicious = analysis_stats["malicious"] + analysis_stats["suspicious"]
+        an_undetected = analysis_stats["undetected"]
+        if (an_malicious > 0.7 * total):
+            analysis_result = "critical"
+        elif (an_malicious > 0.5 * total):
+            analysis_result = "high"
+        elif (an_malicious > 0.3 * total):
+            analysis_result = "medium"
+        else: analysis_result = "low"
+
+        print(f"The name of the malware is {name}, {community_score_harmless} people from the community scored it as harmless while {community_score_malicious} scored it as malicious. From the last analysis, this many antiviruses flagged it as: {an_harmless} harmless, {an_malicious} malicious, {an_undetected} undetected.\n\tThe result of the scan is {analysis_result}")
+        result = {
+            "name": name,
+            "community_score_harmless": community_score_harmless,
+            "community_score_malicious": community_score_malicious,
+            "analysis_harmless": an_harmless,
+            "analysis_malicious": an_malicious,
+            "analysis_undetected": an_undetected,
+            "analysis_result": analysis_result
+        }
+        return result
+    except:
+        return "error"
 
 # creating the buttons with their correct commands and placing them in the window, as well as their labels
 dir_btn = CTkButton(app, text="Select Directory", command=dir_dialog)
