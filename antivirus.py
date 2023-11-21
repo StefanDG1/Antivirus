@@ -7,8 +7,10 @@ import json
 
 
 # initializing the customtkinter app window and giving it dimensions and a title
+width = 800
+height = 600
 app = CTk()
-app.geometry("800x600")
+app.geometry(f"{width}x{height}")
 app.title("Antivirus")
 
 # creating an empty string and tuple where the dir and filenames will be stored
@@ -17,7 +19,7 @@ filenames = ()
 dir_selected = 0
 file_list = []
 hash_list = []
-hash_index = []
+bad_files_index = []
 
 
 # function to make a list with the absolute paths of all needed files
@@ -53,16 +55,16 @@ def hash_files():
     print(hash_list)
 
 def virus_scan():
-    global hash_index
-    hash_index = []
+    global bad_files_index
+    bad_files_index = []
     with open("./full_md5.txt", "r") as hash_db:
         hashes = hash_db.read().splitlines()
         for i, hash in enumerate(hash_list):
             if(hash in hashes):
-                hash_index.append(i)
+                bad_files_index.append(i)
 
-    print(hash_index)
-    for index in hash_index:
+    print(bad_files_index)
+    for index in bad_files_index:
         print(file_list[index])
 
 
@@ -70,10 +72,14 @@ def run_scan():
     get_file_list()
     hash_files()
     virus_scan()
-    #if(virusTotal_selected):
-    for hash in hash_list:
-        result = virusTotal_scan(hash)
-        print(result)
+    if(switch_vt.get() == "on"):
+        for i, hash in enumerate(hash_list):
+            result = virusTotal_scan(hash)
+            print(result)
+            if (result != "error"):
+                if (i not in bad_files_index):
+                    bad_files_index.append(i)
+    print(bad_files_index)
 
 
 # function to open the dialog box to select a directory and stores it in the dirname string
@@ -144,19 +150,45 @@ def virusTotal_scan(id):
     except:
         return "error"
 
-# creating the buttons with their correct commands and placing them in the window, as well as their labels
-dir_btn = CTkButton(app, text="Select Directory", command=dir_dialog)
-dir_btn.place(relx=0.5, rely=0.5, anchor="center")
-dir_label = CTkLabel(app, text="Selected directory:", fg_color="transparent")
-dir_label.place(relx=0.5, rely=0.55, anchor="center")
 
-file_btn = CTkButton(app, text="Select Files", command=filenames_dialog)
-file_btn.place(relx=0.5, rely=0.6, anchor="center")
-file_label = CTkLabel(app, text="Selected files:", fg_color="transparent")
-file_label.place(relx=0.5, rely=0.65, anchor="center")
+# top frame where buttons are placed
+frame_top = CTkFrame(master=app, fg_color="red", width=200, height=50)
+frame_top.pack(side="top", fill="x")
+frame_top.pack_propagate(False)
 
-run_btn = CTkButton(app, text="Run Scan", command=run_scan)
-run_btn.place(relx=0.5, rely=0.3, anchor="center")
+dir_btn = CTkButton(frame_top, text="Select Directory", command=dir_dialog)
+dir_btn.pack(side="left")
+dir_label = CTkLabel(frame_top, text="Selected directory:", fg_color="transparent")
+dir_label.pack(side="left")
+
+file_btn = CTkButton(frame_top, text="Select Files", command=filenames_dialog)
+file_btn.pack(side="left")
+file_label = CTkLabel(frame_top, text="Selected files:", fg_color="transparent")
+file_label.pack(side="left")
+run_btn = CTkButton(frame_top, text="Run Scan", command=run_scan)
+run_btn.pack(side="right")
+
+switch_vt = StringVar(value="off")
+switch = CTkSwitch(frame_top, text="VirusTotal Scan", variable=switch_vt, onvalue="on", offvalue="off")
+switch.pack(side="left")
+
+# add and remove files in the left frame
+file_labels = []
+frame_left = CTkFrame(master=app, fg_color="blue", width=300, height=50)
+frame_left.pack(side="left", expand=True, fill="both")
+for i in range(5):
+    dir_label = CTkLabel(frame_left, text="Selected directory:", fg_color="transparent")
+    dir_label.pack(side="top")
+    file_labels.append(dir_label)
+
+print(file_labels)
+file_labels[3].destroy()
+file_labels.pop(3)
+print(file_labels)
+
+
+frame_right = CTkFrame(master=app, fg_color="green", width=300, height=50)
+frame_right.pack(side="right", expand=True, fill="both")
 
 
 app.mainloop()
