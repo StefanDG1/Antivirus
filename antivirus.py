@@ -74,12 +74,11 @@ def run_scan():
     virus_scan()
     if(switch_vt.get() == "on"):
         for i, hash in enumerate(hash_list):
-            result = virusTotal_scan(hash)
+            result = virusTotal_scan(hash, i)
             print(result)
-            if (result != "error"):
-                if (i not in bad_files_index):
-                    bad_files_index.append(i)
     print(bad_files_index)
+    for index in bad_files_index:
+        print(file_list[index])
 
 
 # function to open the dialog box to select a directory and stores it in the dirname string
@@ -130,10 +129,16 @@ def virusTotal_scan(id):
         an_undetected = analysis_stats["undetected"]
         if (an_malicious > 0.7 * total):
             analysis_result = "critical"
+            if (i not in bad_files_index):
+                    bad_files_index.append(i)
         elif (an_malicious > 0.5 * total):
             analysis_result = "high"
+            if (i not in bad_files_index):
+                    bad_files_index.append(i)
         elif (an_malicious > 0.3 * total):
             analysis_result = "medium"
+            if (i not in bad_files_index):
+                    bad_files_index.append(i)
         else: analysis_result = "low"
 
         print(f"The name of the malware is {name}, {community_score_harmless} people from the community scored it as harmless while {community_score_malicious} scored it as malicious. From the last analysis, this many antiviruses flagged it as: {an_harmless} harmless, {an_malicious} malicious, {an_undetected} undetected.\n\tThe result of the scan is {analysis_result}")
