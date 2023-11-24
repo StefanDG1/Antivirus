@@ -175,8 +175,9 @@ def remove_selection():
     for file in file_selection:
         os.remove(file)
 
-
+bad_file_labels = []
 def display_bad_files(bad_indexes):
+    global bad_file_labels
     bad_file_labels = [None] * len(bad_indexes)
 
     for i in range(len(bad_file_labels)):
@@ -189,7 +190,7 @@ def change_info_text(index):
 file_selection = []
 def selected(num):
     global file_selection
-    label_obj = file_labels[num]
+    label_obj = bad_file_labels[num]
     text = label_obj.cget("text")
     if label_obj.cget("fg_color") == "#3B8ED0":
         file_selection.append(text)
