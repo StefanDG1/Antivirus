@@ -101,7 +101,7 @@ def clear_files():
         for label in file_labels:
             label.destroy()
     if (len(bad_file_labels) > 0):
-        for label in file_labels:
+        for label in bad_file_labels:
             label.destroy()
 
 file_labels = []
@@ -177,11 +177,14 @@ def virusTotal_scan(id, i):
 def remove_files():
     for index in bad_files_index:
         os.remove(file_list[index])
+    clear_files()
 
 def remove_selection():
     print(file_selection)
     for file in file_selection:
         os.remove(file)
+    clear_files()
+
 
 bad_file_labels = []
 def display_bad_files(bad_indexes):
@@ -193,7 +196,12 @@ def display_bad_files(bad_indexes):
         bad_file_labels[i].pack(side="top")
 
 def change_info_text(index):
-    info_label.configure(text=info_dict[index])
+    info_data = info_dict[index]
+    info_text = f"The name of the file is {info_data['name']}.\nThe community score is: \
+                {info_data['community_score_harmless']} as harmless and {info_data['community_score_malicious']} \
+                as malicious.\nThis many antiviruses scored it as: harmless: {info_data['analysis_harmless']}\
+                 | malicious {info_data['analysis_malicious']} | undetected {info_data['analysis_undetected']} \nThe estimated danger level is: {info_data['analysis_result']}"
+    info_label.configure(text=info_text)
 
 file_selection = []
 def selected(num):
