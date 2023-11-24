@@ -5,3 +5,4 @@ to get the eicar test file:
 wget https://www.eicar.org/download/eicar-com/?wpdmdl=8840&refresh=655626dfa147a1700144863
 
 malware test files from ytisf/theZoo
+http://www.tekdefense.com/downloads/malware-samples/
