@@ -103,6 +103,9 @@ def run_scan():
         for label in bad_file_labels:
             label.destroy()
     info_label.configure(text='')
+    global file_selection
+    file_selection = []
+    
     hash_files()
     virus_scan()
     global info_dict
@@ -213,10 +216,11 @@ def remove_selection():
 
 # use the dictionary with results to change the info text
 def change_info_text(index):
-    if (info_dict[index] != "error"):
+    try:
         info_data = info_dict[index]
         info_text = f"Details of file:\nThe name of the file is {info_data['name']}.\nThe community score is: {info_data['community_score_harmless']} as harmless and {info_data['community_score_malicious']} as malicious.\nThis many antiviruses scored it as: harmless {info_data['analysis_harmless']} | malicious {info_data['analysis_malicious']} | undetected {info_data['analysis_undetected']} \nThe estimated danger level is: {info_data['analysis_result']}"
         info_label.configure(text=info_text)
+    except: pass
 
 # change colors and add/remove file toggle
 def selected(num):
