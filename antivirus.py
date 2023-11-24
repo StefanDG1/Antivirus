@@ -90,18 +90,24 @@ def run_scan():
 def display_files():
     global file_labels
     get_file_list()
-    if (len(file_labels) > 0):
-        for label in file_labels:
-            label.destroy()
     file_labels = [None] * len(file_list)
 
     for i in range(len(file_labels)):
         file_labels[i] = CTkLabel(scrollable_frame_top, text=file_list[i], fg_color="#3B8ED0", corner_radius=8, padx=10)
         file_labels[i].pack(side="top")
 
+def clear_files():
+    if (len(file_labels) > 0):
+        for label in file_labels:
+            label.destroy()
+    if (len(bad_file_labels) > 0):
+        for label in file_labels:
+            label.destroy()
+
 file_labels = []
 # function to open the dialog box to select a directory and stores it in the dirname string
 def dir_dialog():
+    clear_files()
     global dirname
     global filenames
     filenames = ()
@@ -111,6 +117,7 @@ def dir_dialog():
 
 # function to open the dialog box to select filenames and stores it in the dirname tuple
 def filenames_dialog():
+    clear_files()
     global dirname
     global filenames
     dirname = ''
@@ -172,6 +179,7 @@ def remove_files():
         os.remove(file_list[index])
 
 def remove_selection():
+    print(file_selection)
     for file in file_selection:
         os.remove(file)
 
