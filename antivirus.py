@@ -99,6 +99,10 @@ def virus_scan():
 
 # run scan function that runs other functions as needed
 def run_scan():
+    if (len(bad_file_labels) > 0):
+        for label in bad_file_labels:
+            label.destroy()
+    info_label.configure(text='')
     hash_files()
     virus_scan()
     global info_dict
@@ -127,7 +131,7 @@ def display_bad_files(bad_indexes):
     bad_file_labels = [None] * len(bad_indexes)
 
     for i in range(len(bad_file_labels)):
-        bad_file_labels[i] = CTkButton(scrollable_frame_bottom, text=file_list[i], command= lambda id=i: selected(id), hover_color="#c70000", fg_color="#3B8ED0")
+        bad_file_labels[i] = CTkButton(scrollable_frame_bottom, text=file_list[bad_indexes[i]], command= lambda id=i: selected(id), hover_color="#c70000", fg_color="#3B8ED0")
         bad_file_labels[i].pack(side="top")
 
 # function to open the dialog box to select a directory and stores it in the dirname string
