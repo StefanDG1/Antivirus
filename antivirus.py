@@ -221,9 +221,9 @@ switch.place(rely=0.36, relx=0.5, anchor="center")
 run_btn = CTkButton(container_left, text="Run Scan", command=run_scan)
 run_btn.place(rely=0.45, relx=0.5, anchor="center")
 
-delete_btn = CTkButton(container_left, text="Delete Selected Files", command=run_scan, fg_color="#c70000", hover_color="#990000")
+delete_btn = CTkButton(container_left, text="Delete Selected Files", command=remove_selection, fg_color="#c70000", hover_color="#990000")
 delete_btn.place(rely=0.85, relx=0.5, anchor="center")
-delete_all_btn = CTkButton(container_left, text="Delete all files", command=run_scan)
+delete_all_btn = CTkButton(container_left, text="Delete all files", command=remove_files)
 delete_all_btn.place(rely=0.91, relx=0.5, anchor="center")
 
 
