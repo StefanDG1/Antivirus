@@ -99,6 +99,7 @@ def virus_scan():
 
 # run scan function that runs other functions as needed
 def run_scan():
+    # reset bad files and selection if you want to run the scan again with virustotal on/off
     if (len(bad_file_labels) > 0):
         for label in bad_file_labels:
             label.destroy()
@@ -161,6 +162,7 @@ def virusTotal_scan(id, i):
 
     response = requests.get(url, headers=headers)
     res_json = response.json()
+    # error can be from limit being reached or file not existing in their database
     try:
         res_attributes = res_json["data"]["attributes"]
 
@@ -216,13 +218,14 @@ def remove_selection():
 
 # use the dictionary with results to change the info text
 def change_info_text(index):
+    # if no info cause virustotal wasn't selected
     try:
         info_data = info_dict[index]
         info_text = f"Details of file:\nThe name of the file is {info_data['name']}.\nThe community score is: {info_data['community_score_harmless']} as harmless and {info_data['community_score_malicious']} as malicious.\nThis many antiviruses scored it as: harmless {info_data['analysis_harmless']} | malicious {info_data['analysis_malicious']} | undetected {info_data['analysis_undetected']} \nThe estimated danger level is: {info_data['analysis_result']}"
         info_label.configure(text=info_text)
     except: pass
 
-# change colors and add/remove file toggle
+# change colors and add/remove files from selection toggle
 def selected(num):
     global file_selection
     label_obj = bad_file_labels[num]
