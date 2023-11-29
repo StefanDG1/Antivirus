@@ -1,8 +1,7 @@
 from customtkinter import *
 from os import path, walk, remove
-from os.path import *
-import hashlib
-import requests
+from hashlib import md5
+from requests import get
 
 
 # initializing the customtkinter app window and giving it dimensions and a title
@@ -76,7 +75,7 @@ def hash_files():
     # iterate through every filename in the file list
     for filename in file_list:
         # make a new hash object for each file
-        md5_h = hashlib.md5()
+        md5_h = md5()
         # open file for reading in binary mode
         with open(filename,'rb') as file:
         # read file in chunks and update hash
@@ -160,7 +159,7 @@ def virusTotal_scan(id, i):
 
     headers = {"x-apikey": api_key}
 
-    response = requests.get(url, headers=headers)
+    response = get(url, headers=headers)
     res_json = response.json()
     # error can be from limit being reached or file not existing in their database
     try:
