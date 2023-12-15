@@ -1,5 +1,6 @@
-from customtkinter import *
-from os import path, walk, remove
+from customtkinter import CTk, CTkLabel, CTkButton, CTkFrame, StringVar, CTkSwitch, CTkScrollableFrame, filedialog
+from os import path, walk
+from os import remove as _remove
 from hashlib import md5
 from requests import get
 
@@ -62,7 +63,7 @@ def get_file_list():
     global file_list
     if dirname != '':
         # use the os.walk() function to get the file names in all subdirectories 
-        for root, dirs, files in walk(os.path.abspath(dirname)):
+        for root, dirs, files in walk(path.abspath(dirname)):
             for file in files:
                 file_list.append(path.join(root, file))
     else:
@@ -204,13 +205,13 @@ def virusTotal_scan(id, i):
 # remove all malicious files
 def remove_files():
     for index in bad_files_index:
-        os.remove(file_list[index])
+        _remove(file_list[index])
     reset_all()
 
 # remove selected files
 def remove_selection():
     for file in file_selection:
-        os.remove(file)
+        _remove(file)
     reset_all()
 
 
