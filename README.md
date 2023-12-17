@@ -1,3 +1,7 @@
+### Github link
+https://github.com/StefanDG1/Antivirus/
+
+
 ### Antivirus Project that gets the hash signature of files and compares them to a malware hash database and uses the VirusTotal api to run a scan on the selected files.
 
 The database of MD5 hashes was obtained from https://bazaar.abuse.ch/export/txt/md5/full/
@@ -7,6 +11,11 @@ To get the eicar test file (harmless file that is used for testing):
 wget https://www.eicar.org/download/eicar-com/?wpdmdl=8840&refresh=655626dfa147a1700144863
 
 If there are no malicious files then after running the scan it will seem like nothing happened, since none where detected. With no malicious files, it is hard/impossible to test the selection and delete functions of the app.
+
+### Report
+Name: Stefan Daniel Gheorghiu
+Title: Antivirus
+Project description: Python antivirus that selects files and scans them against a database of known malicious hashes and/or runs a scan using the VirusTotal api to determine how secure the files are.
 
 ### Architecture
 The GUI part is at the bottom, placing all the elements and buttons.
