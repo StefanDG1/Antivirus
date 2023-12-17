@@ -59,6 +59,7 @@ def reset_all():
 
 
 # function to make a list with the absolute paths of all needed files
+# inspiration from https://stackoverflow.com/questions/9816816/get-absolute-paths-of-all-files-in-a-directory
 def get_file_list():
     global file_list
     if dirname != '':
